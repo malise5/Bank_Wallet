@@ -2,6 +2,7 @@ package com.github.io.bank_wallet.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.security.access.method.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService{
                             .username(userDto.username())
                             .email(userDto.email())
                             .password(encodedPassword)
-                            .role(userDto.role() != null ? userDto.role() : Roles.ADMIN)
+                            .role(userDto.role() != null ? userDto.role() : Set.of(Roles.ADMIN))
                             .isVerified(false)
                             .build();
         User savedUser = userRepository.save(user);

@@ -32,10 +32,10 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest authRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password())
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.username());
         String token = jwtUtil.generateToken(userDetails);
 
         // Extract role from the user details (casting to User to access the role)

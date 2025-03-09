@@ -26,14 +26,17 @@ public class SecurityConfigEndPoints {
     @Bean
     public SecurityFilterChain securityFilterChain(
         HttpSecurity http) throws Exception {
-    return  http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            return http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**").permitAll()  // Public routes
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Admin-only routes
+                    .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // User & Admin routes
+                    .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
         }
     
     @Bean

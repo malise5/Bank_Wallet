@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: bank_wallet
+
+# Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fintech_db
+    username: fintech_user
+    password: fintech_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  devtools:
+    add-properties: true  # Disable DevTools property defaults
+
+server:
+  port: 8082

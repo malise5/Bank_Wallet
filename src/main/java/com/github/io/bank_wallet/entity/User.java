@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.mapping.UserDefinedType;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,7 +58,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Roles role;
+    private Set<Roles> role;
     
     private boolean isVerified;
 
@@ -78,10 +80,12 @@ public class User implements UserDetails {
     }
 
 
-    @Override
+   @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); // Add "ROLE_" prefix
-        }
+        return role.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String getPassword() {

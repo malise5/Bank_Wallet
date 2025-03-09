@@ -1,5 +1,6 @@
 package com.github.io.bank_wallet.controller;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,12 +37,32 @@ public class AuthController {
         );
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.username());
-        String token = jwtUtil.generateToken(userDetails);
+        String accessToken = jwtUtil.generateToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
         // Extract role from the user details (casting to User to access the role)
         Roles role = ((User) userDetails).getRole().iterator().next(); // Assuming User class has getRoles method
 
-        return new AuthResponse(token, userDetails.getUsername(), role);
+        return new AuthResponse(accessToken, refreshToken, userDetails.getUsername(), role);
     }
-    
+
+    @PostMapping("/refresh")
+    public AuthResponse refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        if (refreshToken == null) {
+            throw new IllegalArgumentException("Refresh Token is required");
+        }
+
+        String email = jwtUtil.extractUsername(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        if (!jwtUtil.validateToken(refreshToken, userDetails)) {
+            throw new IllegalArgumentException("Invalid Refresh Token");
+        }
+
+        String newAccessToken = jwtUtil.generateToken(userDetails);
+
+        return new AuthResponse(newAccessToken, refreshToken, email, ((User) userDetails).getRole().iterator().next());
+    }
+
 }

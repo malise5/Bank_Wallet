@@ -1,5 +1,7 @@
 package com.github.io.bank_wallet.controller;
 
+import java.util.Set;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,15 +32,14 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest authRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password())
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.username());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails);
 
         // Extract role from the user details (casting to User to access the role)
-        Roles role = ((User) userDetails).getRole(); // Assuming User class has getRole method
-
+        Roles role = ((User) userDetails).getRole().iterator().next(); // Assuming User class has getRoles method
 
         return new AuthResponse(token, userDetails.getUsername(), role);
     }

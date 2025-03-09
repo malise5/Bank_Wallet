@@ -11,6 +11,6 @@ import com.github.io.bank_wallet.enums.TransactionType;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     List<Transaction> findByWalletId(Long walletId);
-    List<Transaction> findByTransactionsType(TransactionType transactionType);
+    List<Transaction> findByTransactionType(TransactionType transactionType);
     List<Transaction> findByStatus(StatusType status);
 }

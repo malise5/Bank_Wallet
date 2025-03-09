@@ -3,6 +3,7 @@ package com.github.io.bank_wallet.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.github.io.bank_wallet.enums.Roles;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -58,8 +60,8 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Set<Roles> role;
-    
+    private Roles role;
+
     private boolean isVerified;
 
     @Column(nullable = false, updatable = false)
@@ -79,12 +81,15 @@ public class User implements UserDetails {
         updatedAt = LocalDateTime.now();
     }
 
-
-   @Override
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    // return role.stream()
+    // .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+    // .collect(Collectors.toList());
+    // }
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                .collect(Collectors.toList());
+        return role != null ? List.of(new SimpleGrantedAuthority("ROLE_" + role.name())) : List.of();
     }
 
     @Override

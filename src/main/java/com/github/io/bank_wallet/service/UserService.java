@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.github.io.bank_wallet.dto.UserDto;
 
+
 public interface UserService {
     
     UserDto registerUser(UserDto userDto, String rawPassword);  // Separate registration

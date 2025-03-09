@@ -7,11 +7,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.github.io.bank_wallet.entity.User;
 import com.github.io.bank_wallet.enums.Roles;
 import com.github.io.bank_wallet.repository.UserRepository;
-
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
@@ -26,9 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
             user.getEmail(),
             user.getPassword(),
-            user.getRole().stream()
-                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                    .toList()
+            user.getRole() != null ? getAuthorities(user.getRole()) : Collections.emptyList()
     );
     }
 

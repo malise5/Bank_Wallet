@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.security.access.method.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.github.io.bank_wallet.dto.UserDto;
 import com.github.io.bank_wallet.entity.User;
@@ -13,6 +14,7 @@ import com.github.io.bank_wallet.enums.Roles;
 import com.github.io.bank_wallet.repository.UserRepository;
 import com.github.io.bank_wallet.service.UserService;
 
+@Service
 public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService{
                             .username(userDto.username())
                             .email(userDto.email())
                             .password(encodedPassword)
-                            .role(userDto.role() != null ? userDto.role() : Set.of(Roles.ADMIN))
+                            .role(userDto.role())
                             .isVerified(false)
                             .build();
         User savedUser = userRepository.save(user);
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService{
                         .username(savedUser.getUsername())
                         .email(savedUser.getEmail())
                         .role(savedUser.getRole())
+                        .isVerified(savedUser.isVerified())
                         .build();
     }
 

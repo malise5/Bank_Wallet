@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.github.io.bank_wallet.dto.TransactionDto;
 import com.github.io.bank_wallet.entity.Transaction;
 import com.github.io.bank_wallet.entity.Wallet;
@@ -14,6 +16,7 @@ import com.github.io.bank_wallet.repository.UserRepository;
 import com.github.io.bank_wallet.repository.WalletRepository;
 import com.github.io.bank_wallet.service.TransactionService;
 
+@Service
 public class TransactionServiceImpl implements TransactionService {
 
     private UserRepository userRepository;
@@ -77,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getTransactionsByTransactionType(TransactionType transactionType) {
-        return transactionRepository.findByTransactionsType(transactionType).stream()
+        return transactionRepository.findByTransactionType(transactionType).stream()
                 .map(transaction -> TransactionDto.builder()
                         .id(transaction.getId())
                         .walletId(transaction.getWallet().getId())

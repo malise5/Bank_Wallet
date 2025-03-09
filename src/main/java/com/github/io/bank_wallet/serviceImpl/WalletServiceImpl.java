@@ -3,6 +3,8 @@ package com.github.io.bank_wallet.serviceImpl;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.github.io.bank_wallet.dto.WalletDto;
 import com.github.io.bank_wallet.entity.User;
 import com.github.io.bank_wallet.entity.Wallet;
@@ -10,6 +12,7 @@ import com.github.io.bank_wallet.repository.UserRepository;
 import com.github.io.bank_wallet.repository.WalletRepository;
 import com.github.io.bank_wallet.service.WalletService;
 
+@Service
 public class WalletServiceImpl implements WalletService{
 
     private WalletRepository walletRepository;
